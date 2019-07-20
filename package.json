@@ -1,0 +1,21 @@
+{
+  "name": "@rifo/angular-library-generator",
+  "version": "1.0.1",
+  "description": "Angular Library Generator",
+  "main": "genAngularLibrary.js",
+  "scripts": {
+    "genLib": "node genAngularLibrary.js"
+  },
+  "keywords": [
+    "Angular Library Generator"
+  ],
+  "bin": {
+    "genAngularLib": "genAngularLibrary.js"
+  },
+  "author": "Ofir Fridman",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "node-cmd": "^3.0.0"
+  }
+}
