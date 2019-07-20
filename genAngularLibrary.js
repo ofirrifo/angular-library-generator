@@ -55,7 +55,7 @@ function generateAngularApplicationExample(libName, fullName) {
 }
 
 function installAdditionalNpmPackages(libName, fullName) {
-    logSteps(`- Install additional npm packages: prettier, tslint-config-prettier`);
+    logSteps(`- Installing additional npm packages: prettier, tslint-config-prettier`);
     cmd.get(
         `
         cd ${libName}
@@ -98,7 +98,7 @@ function logYellow(text) {
 }
 
 function logSteps(text) {
-    console.log(chalk.yellow(text));
+    console.log(chalk.greenBright(text));
 }
 
 const main = async () => {
