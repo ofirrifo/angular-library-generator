@@ -21,15 +21,47 @@ function question(questionText) {
 }
 
 function createAngularLibrary(libName, fullName) {
+    createAngularWorkspace(libName, fullName);
+}
+
+function createAngularWorkspace(libName, fullName) {
+    logSteps(`- Creating Angular Workspace`);
     cmd.get(
         `
     ng new ${libName} --create-application=false
-    cd ${libName}
-    ng generate library ${libName}
-    ng generate application ${libName}-example --style=scss
-    npm i --D --E prettier
-    npm i --D tslint-config-prettier
     `,
+        () => generateAngularLibrary(libName, fullName)
+    );
+}
+
+function generateAngularLibrary(libName, fullName) {
+    logSteps(`- Creating Angular Library`);
+    cmd.get(
+        `
+        cd ${libName} 
+        ng generate library ${libName}`,
+        () => generateAngularApplicationExample(libName, fullName)
+    );
+}
+
+function generateAngularApplicationExample(libName, fullName) {
+    logSteps(`- Creating Angular application example`);
+    cmd.get(
+        `
+        cd ${libName}
+        ng generate application ${libName}-example --style=scss`,
+        () => installAdditionalNpmPackages(libName, fullName)
+    );
+}
+
+function installAdditionalNpmPackages(libName, fullName) {
+    logSteps(`- Install additional npm packages: prettier, tslint-config-prettier`);
+    cmd.get(
+        `
+        cd ${libName}
+        npm i --D --E prettier
+        npm i --D tslint-config-prettier
+        `,
         () => {
             createLicenseFile(libName, fullName);
             copyPrettierFile(libName);
@@ -41,7 +73,7 @@ function createAngularLibrary(libName, fullName) {
 function copyPrettierFile(libName) {
     const data = fs.readFileSync(`${__dirname}/template-files/.prettierrc`, 'utf-8');
     fs.writeFileSync(`./${libName}/.prettierrc`, data, 'utf-8');
-    console.log('.prettierrc file added.');
+    logSteps('- adding .prettierrc file.');
 }
 
 function createLicenseFile(libName, fullName) {
@@ -54,7 +86,7 @@ function createLicenseFile(libName, fullName) {
     let newValue = data.replace('[year]', new Date().getFullYear());
     newValue = newValue.replace('[fullname]', fullName);
     fs.writeFileSync(`./${libName}/LICENSE`, newValue, 'utf-8');
-    console.log('.LICENSE file added.');
+    logSteps('- adding LICENSE file.');
 }
 
 function logBlue(text) {
@@ -63,6 +95,10 @@ function logBlue(text) {
 
 function logYellow(text) {
     console.log(chalk.hex("#FCE546").bold(text));
+}
+
+function logSteps(text) {
+    console.log(chalk.yellow(text));
 }
 
 const main = async () => {
