@@ -1,10 +1,11 @@
 {
   "name": "@rifo/angular-library-generator",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Angular Library Generator",
   "main": "genAngularLibrary.js",
   "scripts": {
-    "genLib": "node genAngularLibrary.js"
+    "genLib": "node genAngularLibrary.js",
+    "publish": "npm publish"
   },
   "keywords": [
     "Angular Library Generator"
