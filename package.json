@@ -1,6 +1,6 @@
 {
   "name": "@rifo/angular-library-generator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Angular Library Generator",
   "main": "genAngularLibrary.js",
   "scripts": {
