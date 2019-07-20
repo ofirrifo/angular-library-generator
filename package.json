@@ -1,6 +1,6 @@
 {
   "name": "@rifo/angular-library-generator",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Angular Library Generator",
   "main": "genAngularLibrary.js",
   "scripts": {
@@ -14,6 +14,11 @@
   },
   "author": "Ofir Fridman",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ofirrifo/angular-library-generator.git"
+  },
+  "homepage": "https://github.com/ofirrifo/angular-library-generator",
   "dependencies": {
     "chalk": "^2.4.2",
     "node-cmd": "^3.0.0"
