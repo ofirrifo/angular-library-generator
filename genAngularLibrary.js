@@ -27,6 +27,8 @@ function createAngularLibrary(libName, fullName) {
     cd ${libName}
     ng generate library ${libName}
     ng generate application ${libName}-example --style=scss
+    npm i --D --save-exact prettier
+    npm i --D tslint-config-prettier
     `,
         () => {
             createLicenseFile(libName, fullName);
