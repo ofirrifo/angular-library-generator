@@ -69,6 +69,23 @@ function installAdditionalNpmPackages(libName, fullName) {
             createLicenseFile(libName, fullName);
             copyPrettierFile(libName);
             console.log(chalk.hex('#1ec537').bold(`\n\r Library ${libName} created successfully. 💪`));
+
+            editJsonFile(`./${libName}/package.json`, (jsonObject) => {
+                jsonObject.scripts = {
+                    "ng": "ng",
+                    "all:build": "npm run example:build && npm run lib:build",
+                    "example:start": "ng serve --open",
+                    "example:build": `ng build ${libName}-example --prod --aot --buildOptimizer`,
+                    "example:publish": `npm run example:build && ngh --dir=./dist/${libName}-example --no-silent`,
+                    "example:lint": `ng lint ${libName}-example --fix`,
+                    "lib:build": `ng build ${libName}`,
+                    "lib:lint": `ng lint ${libName} --fix`,
+                    "lib:publish": `./dist/${libName} npm publish`
+                };
+                return jsonObject;
+            })
+
+
         }
     );
 }
@@ -91,6 +108,12 @@ function copyPrettierFile(libName) {
     fs.writeFileSync(`./${libName}/.prettierrc`, data, 'utf-8');
     logSteps('Adding .prettierrc file.');
     spinner.succeed();
+}
+
+function editJsonFile(pathToFile, cb) {
+    let jsonObject = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
+    jsonObject = cb(jsonObject);
+    fs.writeFileSync(pathToFile, JSON.stringify(jsonObject, null, 2));
 }
 
 function logBlue(text) {
