@@ -58,12 +58,12 @@ function generateAngularApplicationExample(libName, fullName) {
 }
 
 function installAdditionalNpmPackages(libName, fullName) {
-    logSteps(`Installing additional npm packages: prettier, tslint-config-prettier`);
+    logSteps(`Installing additional npm packages:  prettier, tslint-config-prettier, husky, lint-staged`);
     cmd.get(
         `
         cd ${libName}
         npm i --D --E prettier
-        npm i --D tslint-config-prettier
+        npm i --D tslint-config-prettier husky lint-staged     
         `,
         () => {
             createLicenseFile(libName, fullName);
@@ -82,10 +82,27 @@ function installAdditionalNpmPackages(libName, fullName) {
                     "lib:lint": `ng lint ${libName} --fix`,
                     "lib:publish": `./dist/${libName} npm publish`
                 };
+
+                jsonObject.husky = {hooks: {"pre-commit": "lint-staged"}};
+                jsonObject["lint-staged"] = {
+                    "projects/**/*.ts": [
+                        "prettier --write",
+                        "git add"
+                    ]
+                };
                 return jsonObject;
-            })
+            });
 
+            editJsonFile(`./${libName}/tslint.json`, (jsonObject) => {
+                if (Array.isArray(jsonObject.extends)) {
+                    jsonObject.extends = [...jsonObject.extends];
+                } else {
+                    jsonObject.extends = [jsonObject.extends];
+                }
+                jsonObject.extends.push("tslint-config-prettier");
 
+                return jsonObject;
+            });
         }
     );
 }
