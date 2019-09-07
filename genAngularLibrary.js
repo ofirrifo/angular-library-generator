@@ -85,11 +85,11 @@ function installAdditionalNpmPackages(options) {
                     "all:build": "npm run example:build && npm run lib:build",
                     "example:start": "ng serve --open",
                     "example:build": `ng build ${libName}-example --prod --aot --buildOptimizer`,
-                    "example:publish": `npm run example:build && ngh --dir=./dist/${libName}-example --no-silent`,
+                    "example:publish-2-gh-pages": `npm run example:build && ngh --dir=./dist/${libName}-example --no-silent`,
                     "example:lint": `ng lint ${libName}-example --fix`,
                     "lib:build": `ng build ${libName}`,
                     "lib:lint": `ng lint ${libName} --fix`,
-                    "lib:publish": `./dist/${libName} npm publish`
+                    "lib:publish-2-npm": `./dist/${libName} npm publish`
                 };
 
                 jsonObject.husky = {hooks: {"pre-commit": "lint-staged"}};
