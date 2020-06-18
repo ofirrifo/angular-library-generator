@@ -1,13 +1,16 @@
 # angular-library-generator
-Angular Library Generator.
+CLI tool for generating high standard Angular libraries.
 
-# What is do
-- Create an angular workspace 
-- Create angular library
-- Create angular example application
-- Add MIT LICENSE file
-- Add prettier 
-- Add some package.json scripts 
+## Features 
+- Creates An angular workspace 
+- Createa Angular library
+- Createa an Angular example application
+- Configures git hooks using Husky
+- Adds MIT LICENSE file
+- Adds prettier
+- Adds README.md and CONTRIBUTE.md templates
+
+And more!
 
  
 ## Installation
@@ -16,8 +19,8 @@ npm i -g @rifo/angular-library-generator
 ```
 
 ## Usage
-Execute this command in you'r terminal.
+Just type 
 ```sh
 genAngularLib 
 ```
-
+And start generating!
