@@ -1,4 +1,4 @@
-# angular-library-generator
+# Angular-library-generator
 CLI tool for generating high standard Angular libraries.
 
 ## Features 
