@@ -11,6 +11,28 @@ const figlet = require('figlet');
 
 let spinner;
 
+const fileUtils = (function () {
+    function _readTemplateFile(fileName) {
+        return fs.readFileSync(`${__dirname}/template-files/${fileName}`, 'utf-8');
+    }
+
+    function _copyTemplateFile(fileName, options, copyToLib) {
+        const data = fileUtils.readTemplateFile(fileName);
+        fs.writeFileSync(`./${options.libName}/${fileName}`, data, 'utf-8');
+        if (copyToLib) {
+            fs.writeFileSync(`./${options.libName}/projects/${options.libName}/${fileName}`, data, 'utf-8');
+        }
+        logSteps(`Adding ${fileName}\` file.`);
+        spinner.succeed();
+    }
+
+
+    return {
+        readTemplateFile: _readTemplateFile,
+        copyTemplateFile: _copyTemplateFile,
+    }
+})();
+
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -67,10 +89,10 @@ function installAdditionalNpmPackages(options) {
         `,
         () => {
             createLicenseFile(options);
-            copyPrettierFile(options);
-            createReadmeFile(options);
+            fileUtils.copyTemplateFile('.prettierrc', options, false);
+            fileUtils.copyTemplateFile('CONTRIBUTING.md', options, true);
             console.log(chalk.hex('#1ec537').bold(`\n\r Library ${options.libName} created successfully. 💪`));
-            figlet(options.libName, function(err, data) {
+            figlet(options.libName, function (err, data) {
                 if (err) {
                     console.log('Something went wrong...');
                     console.dir(err);
@@ -127,27 +149,10 @@ function createLicenseFile(options) {
     let newValue = data.replace('[year]', new Date().getFullYear());
     newValue = newValue.replace('[fullname]', fullName);
     fs.writeFileSync(`./${options.libName}/LICENSE`, newValue, 'utf-8');
+    fs.writeFileSync(`./${options.libName}/projects/${options.libName}/LICENSE`, newValue, 'utf-8');
     logSteps('Adding LICENSE file.');
 }
 
-function copyPrettierFile(options) {
-    const data = fs.readFileSync(`${__dirname}/template-files/.prettierrc`, 'utf-8');
-    fs.writeFileSync(`./${options.libName}/.prettierrc`, data, 'utf-8');
-    logSteps('Adding .prettierrc file.');
-    spinner.succeed();
-}
-
-function createReadmeFile(options) {
-    const fullName = options.fullName.toLowerCase()
-        .split(' ')
-        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-        .join(' ');
-
-    const data = fs.readFileSync(`${__dirname}/template-files/README.md`, 'utf-8');
-    let newValue = data.replace('[fullname]', fullName);
-    fs.writeFileSync(`./${options.libName}/LICENSE`, newValue, 'utf-8');
-    logSteps('Adding Readme file.');
-}
 
 function editJsonFile(pathToFile, cb) {
     let jsonObject = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
@@ -170,7 +175,7 @@ function logSteps(text) {
     spinner = ora(`${chalk.hex('#98c379')(text)}`).start();
 }
 
-async function questions(){
+async function questions() {
     const options = {};
     options.libName = await question('Enter library name');
     options.fullName = await question('Enter your full name');
