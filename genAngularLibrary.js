@@ -27,7 +27,6 @@ const fileUtils = (function () {
     function _copyTemplateFile(fileName, options, copyToLib) {
         const data = fileUtils.readTemplateFile(fileName);
         fileUtils.copyTemplateFileToDestination(fileName, data, options, copyToLib);
-        spinner.succeed();
     }
 
     return {
@@ -108,6 +107,7 @@ function installAdditionalNpmPackages(options) {
             fileUtils.copyTemplateFile('.prettierrc', options, false);
             fileUtils.copyTemplateFile('CONTRIBUTING.md', options, true);
             createReadmeFile(options);
+            spinner.succeed();
             console.log(chalk.hex('#1ec537').bold(`\n\r Library ${options.libName} created successfully. 💪`));
             figlet(options.libName, function (err, data) {
                 if (err) {
