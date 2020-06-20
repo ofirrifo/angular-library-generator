@@ -3,8 +3,8 @@ CLI tool for generating high standard Angular libraries.
 
 ## Features 
 - Creates An angular workspace 
-- Createa Angular library
-- Createa an Angular example application
+- Creates Angular library
+- Creates an Angular example application
 - Configures git hooks using Husky
 - Adds MIT LICENSE file
 - Adds prettier
@@ -24,3 +24,7 @@ Just type
 genAngularLib 
 ```
 And start generating!
+
+## License
+
+MIT &copy; [Ofir Fridman](https://github.com/ofirrifo)
