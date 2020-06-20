@@ -16,21 +16,37 @@ const fileUtils = (function () {
         return fs.readFileSync(`${__dirname}/template-files/${fileName}`, 'utf-8');
     }
 
-    function _copyTemplateFile(fileName, options, copyToLib) {
-        const data = fileUtils.readTemplateFile(fileName);
+    function _copyTemplateFileToDestination(fileName, data, options, copyToLib) {
         fs.writeFileSync(`./${options.libName}/${fileName}`, data, 'utf-8');
         if (copyToLib) {
             fs.writeFileSync(`./${options.libName}/projects/${options.libName}/${fileName}`, data, 'utf-8');
         }
         logSteps(`Adding ${fileName}\` file.`);
-        spinner.succeed();
     }
 
+    function _copyTemplateFile(fileName, options, copyToLib) {
+        const data = fileUtils.readTemplateFile(fileName);
+        fileUtils.copyTemplateFileToDestination(fileName, data, options, copyToLib);
+        spinner.succeed();
+    }
 
     return {
         readTemplateFile: _readTemplateFile,
         copyTemplateFile: _copyTemplateFile,
+        copyTemplateFileToDestination: _copyTemplateFileToDestination,
+    };
+})();
+
+const optionsUtils = (function () {
+    function _getFullName(options) {
+        return  options.fullName.toLowerCase()
+            .split(' ')
+            .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(' ');
     }
+    return {
+        getFullName: _getFullName
+    };
 })();
 
 
@@ -91,6 +107,7 @@ function installAdditionalNpmPackages(options) {
             createLicenseFile(options);
             fileUtils.copyTemplateFile('.prettierrc', options, false);
             fileUtils.copyTemplateFile('CONTRIBUTING.md', options, true);
+            createReadmeFile(options);
             console.log(chalk.hex('#1ec537').bold(`\n\r Library ${options.libName} created successfully. 💪`));
             figlet(options.libName, function (err, data) {
                 if (err) {
@@ -140,19 +157,22 @@ function installAdditionalNpmPackages(options) {
 }
 
 function createLicenseFile(options) {
-    const fullName = options.fullName.toLowerCase()
-        .split(' ')
-        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-        .join(' ');
-
-    const data = fs.readFileSync(`${__dirname}/template-files/LICENSE`, 'utf-8');
+    const fullName = optionsUtils.getFullName(options);
+    const fileName = 'LICENSE'
+    const data = fileUtils.readTemplateFile(fileName);
     let newValue = data.replace('[year]', new Date().getFullYear());
     newValue = newValue.replace('[fullname]', fullName);
-    fs.writeFileSync(`./${options.libName}/LICENSE`, newValue, 'utf-8');
-    fs.writeFileSync(`./${options.libName}/projects/${options.libName}/LICENSE`, newValue, 'utf-8');
-    logSteps('Adding LICENSE file.');
+    fileUtils.copyTemplateFileToDestination(fileName, newValue, options, true);
 }
 
+function createReadmeFile(options) {
+    const fullName = optionsUtils.getFullName(options);
+    const fileName = 'README.md'
+    const data = fileUtils.readTemplateFile(fileName);
+    let newValue = data.replace('[year]', new Date().getFullYear());
+    newValue = newValue.replace('[fullname]', fullName);
+    fileUtils.copyTemplateFileToDestination(fileName, newValue, options, true)
+}
 
 function editJsonFile(pathToFile, cb) {
     let jsonObject = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
