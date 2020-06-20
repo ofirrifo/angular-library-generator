@@ -75,5 +75,5 @@ This awesome lib is a proxy to another awesome lib I want to thank the author
 
 ## License
 
-MIT &copy; [Liron Hazan](https://github.com/LironHazan)
+MIT &copy; [Your Name](https://github.com/...)
 
