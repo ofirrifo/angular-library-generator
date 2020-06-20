@@ -68,6 +68,7 @@ function installAdditionalNpmPackages(options) {
         () => {
             createLicenseFile(options);
             copyPrettierFile(options);
+            createReadmeFile(options);
             console.log(chalk.hex('#1ec537').bold(`\n\r Library ${options.libName} created successfully. 💪`));
             figlet(options.libName, function(err, data) {
                 if (err) {
@@ -134,6 +135,18 @@ function copyPrettierFile(options) {
     fs.writeFileSync(`./${options.libName}/.prettierrc`, data, 'utf-8');
     logSteps('Adding .prettierrc file.');
     spinner.succeed();
+}
+
+function createReadmeFile(options) {
+    const fullName = options.fullName.toLowerCase()
+        .split(' ')
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ');
+
+    const data = fs.readFileSync(`${__dirname}/template-files/README.md`, 'utf-8');
+    let newValue = data.replace('[fullname]', fullName);
+    fs.writeFileSync(`./${options.libName}/LICENSE`, newValue, 'utf-8');
+    logSteps('Adding Readme file.');
 }
 
 function editJsonFile(pathToFile, cb) {
