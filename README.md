@@ -1,6 +1,6 @@
 # Angular-library-generator
-[Imgur](https://imgur.com/vQ0MnwS)
-![plop demo](https://i.imgur.com/penUFkr.gif)
+
+![plop demo](https://imgur.com/vQ0MnwS)
 
 CLI tool for generating high standard Angular libraries.
 
