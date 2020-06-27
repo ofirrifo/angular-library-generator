@@ -1,7 +1,7 @@
 # Angular-library-generator
 
 CLI tool for generating high standard Angular libraries.
-![plop demo](https://imgur.com/yyINrdQ)
+![plop demo](https://i.imgur.com/yyINrdQ.gif)
 
 ## Features 
 - Creates An angular workspace 
